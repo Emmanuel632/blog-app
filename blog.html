@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Glassmorphism Feed — My Blog</title>
+
+    <style>
+        /* ---------- IMPORT FONT ---------- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+        /* ---------- ROOT / THEME ---------- */
+        :root {
+            --bg-1: #f4f7fb;
+            --glass-bg: rgba(255, 255, 255, 0.36);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --muted: #7a7f87;
+            --accent: linear-gradient(135deg, #7ee8fa, #80ffdb 60%);
+            --card-radius: 16px;
+            --accent-color: #7ee8fa;
+        }
+
+        /* ---------- PAGE BASE ---------- */
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background:
+                radial-gradient(800px 400px at 10% 10%, rgba(126, 232, 250, 0.08), transparent 10%),
+                radial-gradient(600px 300px at 90% 90%, rgba(128, 255, 219, 0.05), transparent 10%),
+                var(--bg-1);
+            color: #0f1720;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            justify-content: center;
+            padding: 36px 20px;
+        }
+
+        /* ---------- WRAP ---------- */
+        .wrap {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+        }
+
+        /* ---------- SIDEBAR (left) ---------- */
+        .sidebar {
+            width: 280px;
+            min-width: 220px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.25));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 40px rgba(15, 23, 32, 0.06);
+            backdrop-filter: blur(8px) saturate(120%);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            height: fit-content;
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ffffffcc, #ffffff66);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #0f1720;
+            font-size: 1.05rem;
+            box-shadow: 0 6px 18px rgba(12, 18, 20, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 1.15rem;
+            letter-spacing: -0.2px
+        }
+
+        .brand p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem
+        }
+
+        .profile {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #fff, #f2f9ff);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 30px rgba(12, 18, 20, 0.06);
+        }
+
+        .profile .meta {
+            font-weight: 600
+        }
+
+        .profile .meta small {
+            display: block;
+            color: var(--muted);
+            font-weight: 400;
+            margin-top: 4px;
+            font-size: 0.9rem
+        }
+
+        .sidebar .muted {
+            color: var(--muted);
+            font-size: 0.95rem
+        }
+
+        /* ---------- MAIN COLUMN ---------- */
+        .main {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        /* ---------- POST CREATOR (glass) ---------- */
+        #postForm {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 18px;
+            box-shadow: 0 18px 50px rgba(12, 18, 20, 0.06);
+            backdrop-filter: blur(10px) saturate(115%);
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        label.small {
+            font-size: 0.9rem;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600
+        }
+
+        /* inputs */
+        .field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: box-shadow .15s, transform .15s;
+        }
+
+        .field:focus {
+            box-shadow: 0 8px 28px rgba(12, 18, 20, 0.06);
+            transform: translateY(-2px)
+        }
+
+        .file-input {
+            padding: 10px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #f7fbff);
+            border: 1px dashed rgba(10, 20, 30, 0.06);
+            font-size: 0.92rem;
+            cursor: pointer;
+        }
+
+        input.field {
+            min-height: 110px;
+            resize: vertical
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 10px
+        }
+
+        .btn {
+            border: 0;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(12, 18, 20, 0.06)
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border: 1px solid rgba(15, 23, 32, 0.06);
+            color: #0f1720
+        }
+
+        .btn.primary {
+            background: linear-gradient(90deg, #7ee8fa, #80ffdb);
+            color: #042;
+            min-width: 120px
+        }
+
+        /* ---------- GRID FEED (glass cards) ---------- */
+        #postsContainer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .post-card {
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.45));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 50px rgba(12, 18, 20, 0.06);
+            backdrop-filter: blur(8px) saturate(120%);
+            transition: transform .16s ease, box-shadow .16s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 36px 80px rgba(12, 18, 20, 0.12)
+        }
+
+        .post-media {
+            width: 100%;
+            height: 220px;
+            display: block;
+            object-fit: cover;
+            background: linear-gradient(180deg, #eafcff, #fff);
+        }
+
+
+
+        .Emmanuel {
+            width: 40%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0415);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* Hover effect */
+        .Emmanuel:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+        }
+
+
+
+
+        .post-body {
+            padding: 14px 16px 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .post-title {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #071126
+        }
+
+        .post-excerpt {
+            margin: 0;
+            color: #334155;
+            font-size: 0.95rem;
+            line-height: 1.5
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--muted)
+        }
+
+        .like-btn {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(10, 20, 30, 0.06);
+            background: rgba(255, 255, 255, 0.55);
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* ---------- EMPTY STATE ---------- */
+        .emptyMessage {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px dashed rgba(12, 18, 20, 0.06);
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* ---------- FOOTER CTA ---------- */
+        .footer-note {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width:1000px) {
+            .wrap {
+                max-width: 900px;
+                gap: 18px
+            }
+
+            .sidebar {
+                display: none
+            }
+
+            #postsContainer {
+                grid-template-columns: repeat(1, 1fr)
+            }
+        }
+
+        @media (max-width:420px) {
+            body {
+                padding: 20px
+            }
+
+            .post-media {
+                height: 180px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <aside class="sidebar" aria-hidden="true">
+            <div class="brand">
+                <div class="logo">GB</div>
+                <div>
+                    <h1>GlassBlog</h1>
+                    <p>Glossy • Clean • Feed</p>
+                </div>
+            </div>
+
+            <div class="profile">
+                <div class="avatar" aria-hidden="true"></div>
+                <div class="meta">
+                    <div>Emmanuel</div>
+                    <small>Creator • Minimal vibes</small>
+                </div>
+            </div>
+
+            <div class="muted">New post — use the form in the main column to create image posts and stories. Cards use
+                glassmorphism for a premium feel.</div>
+
+            <div style="margin-top:8px">
+                <button class="btn primary" style="width:100%">New Post</button>
+            </div>
+
+        </aside>
+        <main class="main">
+            <section id="postForm" aria-label="Create new post">
+                <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+                    <input id="postTitle" class="field" type="text"
+                        placeholder="Post title (e.g. Sunset at the beach)" />
+                </div>
+
+                <div style="display:flex;gap:12px;flex-direction:column">
+                    <input id="postFile" class="file-input" type="file" accept="image/*"
+                        onchange="pickPicture(event)" />
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAclBMVEX///8AAABRUVHX19eOjo7y8vLu7u4dHR34+Pj8/Pzw8PDg4OCEhIQZGRlWVlY2NjZHR0eXl5fp6enFxcVycnLPz8+jo6Opqal6enq7u7svLy9jY2NeXl60tLRqamrb29sqKip+fn4/Pz+lpaUTExMLCwvuYgcHAAAErUlEQVR4nO2d63aqMBBGExUB8VJBe6+tvbz/Kx5s5ZggEITBzLi+/aurtWG2jEkIMlEKAAAAAAAAAAAAAAAAAAAAAAAAAABIJRhHvkMYlGCntd4FvsMYjm2oD4Rb34EMxZcuuPcdyiDMdvrEbuY7HHrGK23yPPYdEDUPusyD75BIiXZngnmm3tC48f5cIZhn6rvvwKg4z9DbytTosVZQ68cbyNTks0FQ68/Ed4B9eWr0O/DkO8ReRHsrJefHH+ZW4u4FZ2pyZ5p8qcnxp4kxgcu5E5upTz+GxnM+3T4Zqq01gMjM1HhuOvxORA1De5qq976j7UBqZejfxYRpqNS9lampz2C7kJnhfx+n2bahGn+bL8r8BduBeGLG/lJ0liVDFbyaL5vEvsK9nHRkRr7+//uyoVJr84UjMZmaLYywQyP7zg2LhY0/FkIy1crQ0aziL4ahmlnne1JujCHBsj7iKsPSO7JkvxBn96GlrKs2VJmkPtXqOZblnqPGUKXWeV8rvkxfrAw96/3rDMujy/Q64V7O9sOMs2KuWWtYusr6YLpk7J6FNRhWzvJ4EVnzk3nl/KTJsDRTf2V30Tg2R+66q6FGw1KmhsyWjNtd0ToMz66Y+RBszMjqVyVchqVVjw2b0T+y3vq3+hc6DZV6s5KBy4fRHOZXTWsuLQxVYt7B4TL4Gyuim8ZrvDaGKjZS/pM20M6c3vWGDD3QytDM1BVdkL0oBrJP152WlobqvciKOVWIPZm27fraGv7vnNlc9Cf5tcHCkaEHWhvmmbrIr004rRQH0zbLSBcYqnjKZjS8gEsMZQJD+cBQPjCUDwzlA0P5wFA+MJQPDOUDQ/nAUD4wlA8M5QND+cBQPjCUDwzlA0P5wFA+MJQPDOUDQ/nAUD4wlA8M5QND+XA03E4mhM9zDmC4Xa+3PWoxRL+PPTySVXMgN4x/S/n0KIt2fGSL7PkqcsPeAR4DWlGdRGrDuHjiqmsDwfH/F1QP51AbTotHc7s+fFIYhlTPx9++YVFSgqowBD/D+K+OyZLqc83P8K/81Y6sOYaGuWNCWH2WpSEpMHQCQ+/A0AkMvUNmSDbzpiZdEBlqTs/FmySaypBpYSq1JTPkWJfqwD2Z4StpXHS8khn+8OxM0x8yQ6bV4U/V7Psbkq1FkbIiNHQVD/KCUTSLwFBzqbp1ItK0hi+k0VHwQmzIbky06lB2LtZjNsKsP7V3BencjNUKq7N4r2kMQ7ud5nJzVyQubXsSdm5paTekFzym4Fa98APLzk1NdJlR5nvYiLLRWVTd765lZ23l05t5lvqyjNJsvqqIqft9kKCitV/LkR+q7A70qOxW/iDypPvHsGkvKk70GamnvoNvRa97PXN3+97pVwI0cR/AOz1XAvmfxL5VXIPQfQyvhL2LgLo3TvNL782wYrX37dAIyVZY5/NAPowoBFVQN1nyz4qoEm9avY2of57JbooFd+6jeeCOctvkpr1EffFI6Jfz9u0+5FX5Jl+kTnmdxv0QN4vGG/eBr8RmqC1a0jWHgWO1HvR7BcnD5sMdxGB8bB6u8qWCWTL2AeXXGgEAAAAAAAAAAAAAAAAAAAAAAAAAQBf+AdVSNMUgFFvPAAAAAElFTkSuQmCC"
+                        alt="" id="myimage" class="Emmanuel" />
+                    <input id="postBody" class="field" placeholder="Write a short caption or story..."></input>
+                </div>
+
+                <div class="controls">
+                    <button type="button" class="btn secondary" id="cancelPost" onclick="cancel()">Cancel</button>
+                    <button type="button" class="btn primary" id="publishPost" onclick="publish()">Publish</button>
+                </div>
+            </section>
+            <section id="postsContainer" aria-live="polite">
+                <div id="emptyMessage" class="emptyMessage">No posts yet — publish your first image post.</div>
+                <article class="post-card" id="article" style="display:none">
+                    <img class="post-media" src="" alt="Post image" />
+                    <div class="post-body">
+                        <h3 class="post-title"></h3>
+                        <p class="post-excerpt"></p>
+                        <div class="post-meta">
+                            <span class="date"></span>
+                            <button class="like-btn"></button>
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
+<script>
+    const defaultImage =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAA...";
+
+    let postTitle = document.getElementById('postTitle');
+    let postBody = document.getElementById('postBody');
+    let postsContainer = document.getElementById('postsContainer');
+    let myimage = document.getElementById('myimage');
+    function pickPicture(ev) {
+        let file = ev.target.files[0];
+        if (!file) {
+            alert('please attach a file');
+            return;
+        }
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            myimage.src = e.target.result;
+        };
+    }
+    function publish() {
+        let data = JSON.parse(localStorage.getItem('userData')) || [];
+        if (
+            myimage.src === defaultImage ||
+            !postTitle.value.trim() ||
+            !postBody.value.trim()
+        ) {
+            alert('all fields are mandatory to make a post');
+            return;
+        }
+
+        let newPost = {
+            title: postTitle.value.trim(),
+            post: postBody.value.trim(),
+            file: myimage.src,
+            liked: false      
+        };
+
+        data.push(newPost);
+        localStorage.setItem('userData', JSON.stringify(data));
+
+        renderPosts();
+        cancel();
+    }
+    function cancel() {
+        postTitle.value = '';
+        postBody.value = '';
+        myimage.src = defaultImage;
+    }
+    function toggleLike(index) {
+        let data = JSON.parse(localStorage.getItem('userData')) || [];
+
+        data[index].liked = !data[index].liked;
+        localStorage.setItem('userData', JSON.stringify(data));
+        renderPosts();
+    }
+    function renderPosts() {
+        let data = JSON.parse(localStorage.getItem('userData')) || [];
+
+        if (data.length === 0) {
+            postsContainer.innerHTML = `<div class="emptyMessage">No posts yet — publish your first image post.</div>`;
+            return;
+        }
+
+        postsContainer.innerHTML = data
+            .map(
+                (item, index) => `
+        <article class="post-card">
+            <img class="post-media" src="${item.file}" alt="Post image" />
+            <div class="post-body">
+                <h3 class="post-title">${item.title}</h3>
+                <p class="post-excerpt">${item.post}</p>
+                <div class="post-meta">
+                    <span class="date">${new Date().toLocaleDateString()}</span>
+
+                    <button id="like-btn" data-id="${index}">
+                        ${item.liked ? "❤️ Liked" : "♡ Like"}
+                    </button>
+                </div>
+            </div>
+        </article>
+        `
+            )
+            .join('');
+        document.getElementById("like-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let id = btn.getAttribute("data-id");
+                toggleLike(id);
+            });
+        });
+    }
+    renderPosts();
+</script>
