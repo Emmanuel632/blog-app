@@ -435,72 +435,17 @@
 
 </html>
 <script>
-    const defaultImage =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAA...";
-
-    let postTitle = document.getElementById('postTitle');
-    let postBody = document.getElementById('postBody');
-    let postsContainer = document.getElementById('postsContainer');
-    let myimage = document.getElementById('myimage');
-    function pickPicture(ev) {
-        let file = ev.target.files[0];
-        if (!file) {
-            alert('please attach a file');
-            return;
-        }
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-            myimage.src = e.target.result;
-        };
-    }
-    function publish() {
-        let data = JSON.parse(localStorage.getItem('userData')) || [];
-        if (
-            myimage.src === defaultImage ||
-            !postTitle.value.trim() ||
-            !postBody.value.trim()
-        ) {
-            alert('all fields are mandatory to make a post');
-            return;
-        }
-
-        let newPost = {
-            title: postTitle.value.trim(),
-            post: postBody.value.trim(),
-            file: myimage.src,
-            liked: false      
-        };
-
-        data.push(newPost);
-        localStorage.setItem('userData', JSON.stringify(data));
-
-        renderPosts();
-        cancel();
-    }
-    function cancel() {
-        postTitle.value = '';
-        postBody.value = '';
-        myimage.src = defaultImage;
-    }
-    function toggleLike(index) {
-        let data = JSON.parse(localStorage.getItem('userData')) || [];
-
-        data[index].liked = !data[index].liked;
-        localStorage.setItem('userData', JSON.stringify(data));
-        renderPosts();
-    }
     function renderPosts() {
-        let data = JSON.parse(localStorage.getItem('userData')) || [];
+    let data = JSON.parse(localStorage.getItem('userData')) || [];
 
-        if (data.length === 0) {
-            postsContainer.innerHTML = `<div class="emptyMessage">No posts yet — publish your first image post.</div>`;
-            return;
-        }
+    if (data.length === 0) {
+        postsContainer.innerHTML = `<div class="emptyMessage">No posts yet — publish your first image post.</div>`;
+        return;
+    }
 
-        postsContainer.innerHTML = data
-            .map(
-                (item, index) => `
+    postsContainer.innerHTML = data
+        .map(
+            (item, index) => `
         <article class="post-card">
             <img class="post-media" src="${item.file}" alt="Post image" />
             <div class="post-body">
@@ -509,21 +454,17 @@
                 <div class="post-meta">
                     <span class="date">${new Date().toLocaleDateString()}</span>
 
-                    <button id="like-btn" data-id="${index}">
+                    <button class="like-btn">
                         ${item.liked ? "❤️ Liked" : "♡ Like"}
                     </button>
                 </div>
             </div>
         </article>
         `
-            )
-            .join('');
-        document.getElementById("like-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                let id = btn.getAttribute("data-id");
-                toggleLike(id);
-            });
-        });
-    }
-    renderPosts();
+        )
+        .join('');
+    document.querySelectorAll('.like-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => toggleLike(index));
+    });
+}
 </script>
